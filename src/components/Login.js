@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './SignUp.css'
 
 const LogIn = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +8,6 @@ const LogIn = () => {
     user_password: '',
   });
   const [errors, setErrors] = useState({});
-  const [loginError, setLoginError] = useState(null); // State to handle login errors
   const navigate = useNavigate();
 
   const validate = () => {
@@ -37,16 +35,10 @@ const LogIn = () => {
 
     try {
       const response = await axios.post('https://syoft.dev/Api/userlogin/api/userlogin', formData);
-      // Check if response contains user data
-      if (response.data && response.data.user) {
-        localStorage.setItem('user', JSON.stringify(response.data.user)); // Adjust if user data is nested
-        navigate('/dashboard');
-      } else {
-        setLoginError('Invalid login credentials'); // Error message for invalid credentials
-      }
+      localStorage.setItem('user', JSON.stringify(response.data));
+      navigate('/dashboard');
     } catch (error) {
       console.error(error);
-      setLoginError('An error occurred during login'); // Error message for API errors
     }
   };
 
@@ -74,7 +66,6 @@ const LogIn = () => {
         
         <button type="submit">Log In</button>
       </form>
-      {loginError && <p className="error">{loginError}</p>} {/* Display login errors */}
     </div>
   );
 };
